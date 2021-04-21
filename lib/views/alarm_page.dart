@@ -170,69 +170,7 @@ class _AlarmPageState extends State<AlarmPage> {
                                       ),
                                     ),
                                     builder: (context) {
-                                      return StatefulBuilder(
-                                        builder: (context, setModalState) {
-                                          return Container(
-                                            padding: const EdgeInsets.all(32),
-                                            child: Column(
-                                              children: [
-                                                TextButton(
-                                                  onPressed: () async {
-                                                    var selectedTime =
-                                                    await showTimePicker(
-                                                      context: context,
-                                                      initialTime:
-                                                      TimeOfDay.now(),
-                                                    );
-                                                    if (selectedTime != null) {
-                                                      final now = DateTime.now();
-                                                      var selectedDateTime =
-                                                      DateTime(
-                                                          now.year,
-                                                          now.month,
-                                                          now.day,
-                                                          selectedTime.hour,
-                                                          selectedTime.minute);
-                                                      _alarmTime =
-                                                          selectedDateTime;
-                                                      setModalState(() {
-                                                        _alarmTimeString =
-                                                            DateFormat('HH:mm')
-                                                                .format(selectedDateTime);
-                                                      });
-                                                    }
-                                                  },
-                                                  child: Text(
-                                                    _alarmTimeString,
-                                                    style:
-                                                    TextStyle(fontSize: 32),
-                                                  ),
-                                                ),
-                                                ListTile(
-                                                  title: Text('Repeat'),
-                                                  trailing: Icon(
-                                                      Icons.arrow_forward_ios),
-                                                ),
-                                                ListTile(
-                                                  title: Text('Sound'),
-                                                  trailing: Icon(
-                                                      Icons.arrow_forward_ios),
-                                                ),
-                                                ListTile(
-                                                  title: Text('Title'),
-                                                  trailing: Icon(
-                                                      Icons.arrow_forward_ios),
-                                                ),
-                                                FloatingActionButton.extended(
-                                                  onPressed: onSaveAlarm,
-                                                  icon: Icon(Icons.alarm),
-                                                  label: Text('Save'),
-                                                ),
-                                              ],
-                                            ),
-                                          );
-                                        },
-                                      );
+                                      return buildBottomSheet();
                                     },
                                   );
                                   // scheduleAlarm();
@@ -331,5 +269,71 @@ class _AlarmPageState extends State<AlarmPage> {
     _alarmHelper.delete(id);
     //unsubscribe for notification
     loadAlarms();
+  }
+
+  Widget buildBottomSheet() {
+    return StatefulBuilder(
+      builder: (context, setModalState) {
+        return Container(
+          padding: const EdgeInsets.all(32),
+          child: Column(
+            children: [
+              TextButton(
+                onPressed: () async {
+                  var selectedTime =
+                  await showTimePicker(
+                    context: context,
+                    initialTime:
+                    TimeOfDay.now(),
+                  );
+                  if (selectedTime != null) {
+                    final now = DateTime.now();
+                    var selectedDateTime =
+                    DateTime(
+                        now.year,
+                        now.month,
+                        now.day,
+                        selectedTime.hour,
+                        selectedTime.minute);
+                    _alarmTime =
+                        selectedDateTime;
+                    setModalState(() {
+                      _alarmTimeString =
+                          DateFormat('HH:mm')
+                              .format(selectedDateTime);
+                    });
+                  }
+                },
+                child: Text(
+                  _alarmTimeString,
+                  style:
+                  TextStyle(fontSize: 32),
+                ),
+              ),
+              ListTile(
+                title: Text('Repeat'),
+                trailing: Icon(
+                    Icons.arrow_forward_ios),
+              ),
+              ListTile(
+                title: Text('Sound'),
+                trailing: Icon(
+                    Icons.arrow_forward_ios),
+              ),
+              ListTile(
+                title: Text('Title'),
+                trailing: Icon(
+                    Icons.arrow_forward_ios),
+              ),
+              FloatingActionButton.extended(
+                onPressed: onSaveAlarm,
+                icon: Icon(Icons.alarm),
+                label: Text('Save'),
+              ),
+            ],
+          ),
+        );
+      },
+    );
   }
 }
